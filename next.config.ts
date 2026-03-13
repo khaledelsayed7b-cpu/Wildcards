@@ -1,52 +1,36 @@
-import type { NextConfig } from 'next'
+import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
-  /**
-   * Local development subdomain rewrites.
-   *
-   * In production, Vercel wildcard domains handle *.hylthcare.com → this app
-   * and the middleware does the rewrite. In dev we need next.config rewrites
-   * because the browser hits localhost and we can't set up real wildcard DNS.
-   *
-   * Example: GET drsmith.localhost:3000/ is rewritten to /drsmith internally.
-   *
-   * NOTE: You also need to add entries to your /etc/hosts (Windows: C:\Windows\System32\drivers\etc\hosts):
-   *   127.0.0.1  drsmith.localhost
-   *   127.0.0.1  cityclinic.localhost
-   *   (one line per slug you want to test locally)
-   */
-  async rewrites() {
-    return [
-      {
-        // Match requests from *.localhost:3000
-        source: '/:path*',
-        has: [
-          {
-            type: 'host',
-            value: '(?<slug>[^.]+)\\.localhost',
-          },
-        ],
-        destination: '/:slug/:path*',
-      },
-    ]
+  reactStrictMode: true,
+  eslint: {
+    ignoreDuringBuilds: true,
   },
-
-  // Allow images from Supabase Storage and common CDNs
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  // Allow access to remote image placeholder.
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '*.supabase.co',
-        pathname: '/storage/v1/object/public/**',
-      },
-      {
-        protocol: 'https',
-        hostname: '*.supabase.in',
-        pathname: '/storage/v1/object/public/**',
+        hostname: 'picsum.photos',
+        port: '',
+        pathname: '/**', // This allows any path under the hostname
       },
     ],
   },
-}
+  output: 'standalone',
+  transpilePackages: ['motion'],
+  webpack: (config, {dev}) => {
+    // HMR is disabled in AI Studio via DISABLE_HMR env var.
+    // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
+    if (dev && process.env.DISABLE_HMR === 'true') {
+      config.watchOptions = {
+        ignored: /.*/,
+      };
+    }
+    return config;
+  },
+};
 
-export default nextConfig
-
+export default nextConfig;
