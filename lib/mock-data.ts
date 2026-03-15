@@ -18,7 +18,7 @@ export const mockProviders: Record<string, Provider> = {
       linkedin: 'https://linkedin.com/in/drahmed'
     },
     photos: [
-      { url: 'https://picsum.photos/seed/drahmed1/800/1000', label: 'د. أحمد محمود' },
+      { url: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=740', label: 'د. أحمد محمود' },
       { url: 'https://picsum.photos/seed/drahmed2/800/800', label: 'مدخل العيادة' },
       { url: 'https://picsum.photos/seed/drahmed3/800/800', label: 'غرفة الاستشارة' },
       { url: 'https://picsum.photos/seed/drahmed4/800/800', label: 'منطقة الانتظار' }
